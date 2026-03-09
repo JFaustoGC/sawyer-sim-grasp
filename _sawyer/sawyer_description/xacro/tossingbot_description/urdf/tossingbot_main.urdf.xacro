@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<robot name="tossingbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ── ARGUMENTS ────────────────────────────────────────────────────────── -->
+  <xacro:arg name="gazebo" default="false"/>
+  <xacro:arg name="pedestal" default="false"/>
+  <xacro:arg name="static" default="true"/>
+  
+  <!-- Gripper Options: none, pneumatic, electric -->
+  <xacro:arg name="gripper_type" default="pneumatic"/>
+  
+  <xacro:arg name="tip_slot_pos" default="1"/>
+  <xacro:arg name="finger_slot_pos" default="1"/>
+  <xacro:arg name="cameras" default="true"/>
+  
+  <!-- Camera Pose Arguments (Meters and Radians) -->
+  <xacro:arg name="cam_right_pos" default="0.55 -0.2637 0.35"/>
+  <xacro:arg name="cam_right_rpy" default="0.0 0.8726 1.5708"/>
+  <xacro:arg name="cam_left_pos" default="0.55 0.5363 0.35"/>
+  <xacro:arg name="cam_left_rpy" default="0.0 0.8726 -1.5708"/>
+
+  <xacro:arg name="finger_pads_file" default="$(find tossingbot_gripper_description)/urdf/finger_pads_flat.xacro"/>
+
+  <!-- ── INCLUDES ─────────────────────────────────────────────────────────── -->
+  <!-- Include Global Materials First -->
+  <xacro:include filename="$(find tossingbot_gripper_description)/urdf/materials.xacro" />
+
+  <!-- Include Base Robot + Gripper -->
+  <xacro:include filename="$(find tossingbot_description)/urdf/tossingbot_base.urdf.xacro" />
+
+  <!-- Include Sensors -->
+  <xacro:if value="$(arg cameras)">
+    <xacro:include filename="$(find tossingbot_description)/urdf/tossingbot_sensors.urdf.xacro"/>
+    <xacro:tossingbot_cameras parent="base"
+                              cam_right_pos="$(arg cam_right_pos)"
+                              cam_right_rpy="$(arg cam_right_rpy)"
+                              cam_left_pos="$(arg cam_left_pos)"
+                              cam_left_rpy="$(arg cam_left_rpy)"/>
+  </xacro:if>
+
+</robot>

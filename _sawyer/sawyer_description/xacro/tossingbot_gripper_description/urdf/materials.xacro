@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <material name="TossingBot/Black">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+  <material name="TossingBot/Grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="TossingBot/DarkGrey">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+  <material name="TossingBot/Red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="TossingBot/White">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+</robot>

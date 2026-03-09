@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find tossingbot_description)/urdf/kinetic_rgb.urdf.xacro"/>
+
+  <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
+
+  <!-- Modular Camera Macro with Pose Overrides -->
+  <xacro:macro name="tossingbot_cameras" params="parent 
+                                                cam_right_pos:='0.55 -0.2637 0.35' 
+                                                cam_right_rpy:='0.0 0.8726 1.5708'
+                                                cam_left_pos:='0.55 0.5363 0.35'
+                                                cam_left_rpy:='0.0 0.8726 -1.5708'">
+    
+    <!-- Right Camera -->
+    <xacro:kinetic_rgb name="rgbd_camera_right" parent="${parent}">
+        <origin xyz="${cam_right_pos}" rpy="${cam_right_rpy}"/>
+        <origin xyz="0 0 0" rpy="${-90 * deg_to_rad} 0 ${-90 * deg_to_rad}" />
+    </xacro:kinetic_rgb>
+
+    <!-- Left Camera -->
+    <xacro:kinetic_rgb name="rgbd_camera_left" parent="${parent}">
+        <origin xyz="${cam_left_pos}" rpy="${cam_left_rpy}"/>
+        <origin xyz="0 0 0" rpy="${-90 * deg_to_rad} 0 ${-90 * deg_to_rad}" />
+    </xacro:kinetic_rgb>
+    
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<robot name="tossingbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="gazebo" default="false"/>
+  <xacro:arg name="pedestal" default="false"/>
+  <xacro:arg name="static" default="true"/>
+  
+  <!-- Gripper Options: none, pneumatic, electric -->
+  <xacro:arg name="gripper_type" default="pneumatic"/>
+  
+  <xacro:arg name="tip_slot_pos" default="1"/>
+  <xacro:arg name="finger_slot_pos" default="1"/>
+  <xacro:arg name="finger_pads_file" default="$(find tossingbot_gripper_description)/urdf/finger_pads_flat.xacro"/>
+
+  <!-- Include Sawyer Base -->
+  <xacro:include filename="$(find sawyer_description)/urdf/sawyer_base.urdf.xacro" />
+
+  <xacro:if value="$(arg gazebo)">
+    <xacro:include filename="$(find sawyer_description)/urdf/sawyer_base.gazebo.xacro" />
+  </xacro:if>
+
+  <!-- Include Selected Gripper -->
+  <xacro:property name="g_type" value="$(arg gripper_type)" />
+
+  <xacro:if value="${g_type == 'pneumatic'}">
+    <xacro:include filename="$(find tossingbot_gripper_description)/urdf/pneumatic_gripper.urdf.xacro" />
+  </xacro:if>
+  
+  <xacro:if value="${g_type == 'electric'}">
+    <xacro:include filename="$(find tossingbot_gripper_description)/urdf/electric_gripper.urdf.xacro" />
+  </xacro:if>
+
+</robot>

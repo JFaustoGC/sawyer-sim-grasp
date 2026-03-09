@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="end_effector" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="gazebo" default="false"/>
+  <xacro:arg name="finger_pads_file" default="$(find tossingbot_gripper_description)/urdf/finger_pads_flat.xacro"/>
+  <xacro:arg name="tip_slot_pos" default="1"/>
+  <xacro:arg name="finger_slot_pos" default="1"/>
+
+  <xacro:if value="$(arg gazebo)">
+    <xacro:property name="gazebo_tag" value="true" scope="local"/>
+  </xacro:if>
+  <xacro:unless value="$(arg gazebo)">
+    <xacro:property name="gazebo_tag" value="false" scope="local"/>
+  </xacro:unless>
+
+  <xacro:include filename="$(find tossingbot_gripper_description)/urdf/pneumatic_gripper.xacro" />
+  <xacro:rethink_pneumatic_gripper side="right"
+                                  gazebo="${gazebo_tag}"
+                                  use_ftsensor="true"
+                                  tip_slot_pos="$(arg tip_slot_pos)"
+                                  finger_slot_pos="$(arg finger_slot_pos)"
+                                  finger_pads_file="$(arg finger_pads_file)"/>
+</robot>
