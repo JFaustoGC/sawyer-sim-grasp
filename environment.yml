@@ -5,9 +5,11 @@ channels:
 dependencies:
   - python=3.10
   - pip
+  - pinocchio  # installs cleanly from conda-forge including C++ bindings
   - pip:
       - mujoco==3.2.7
       - "numpy>=1.24,<2.0"
       - scipy
       - casadi
       - lxml
+      - matplotlib
