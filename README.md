@@ -4,15 +4,23 @@ A beginner-friendly simulation environment for the Sawyer robot arm.
 
 ---
 
-## Installation (one time only)
+## Installation (one time only — WSL + Conda)
 
-1. Install **Python 3.10** from https://www.python.org/downloads/
-   During install: check **"Add Python to PATH"**.
+### 1. Open WSL (Ubuntu on Windows)
+Press `Win+R`, type `wsl`, press Enter.
 
-2. Open a terminal (Windows: press `Win+R`, type `cmd`, press Enter) and run:
-
+### 2. Install Miniconda (if not already installed)
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
 ```
-pip install mujoco numpy scipy casadi
+Restart the terminal after installation.
+
+### 3. Clone or download this repository, then create the environment
+```bash
+cd sawyer-sim-grasp          # or wherever you put the folder
+conda env create -f environment.yml
+conda activate sawyer-sim
 ```
 
 That's it. You do **not** need to install any `sawyer_*` packages — they are
@@ -20,13 +28,12 @@ bundled inside the `_sawyer/` folder.
 
 ---
 
-## How to run the examples (Windows)
+## How to run the examples
 
-Open a terminal in this folder and run:
-
-```
-python examples\01_cube_demo.py
-python examples\02_cylinder_urdf_demo.py
+```bash
+conda activate sawyer-sim
+python examples/01_cube_demo.py
+python examples/02_cylinder_urdf_demo.py
 ```
 
 A 3-D viewer will open. The robot picks up the object and places it to the side.

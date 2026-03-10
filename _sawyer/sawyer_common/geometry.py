@@ -307,7 +307,7 @@ class JointAngles:
         if isinstance(values, JointAngles):
             arr = np.copy(values._values)
         else:
-            arr = np.array(values, dtype=np.float64, copy=False)
+            arr = np.array(values, dtype=np.float64, copy=None)
             arr = np.atleast_1d(arr.squeeze())
         if arr.shape != (7,):
             raise ValueError(f"Expected exactly 7 joint values for Sawyer, got {len(arr) if arr.ndim == 1 else arr.shape}")
