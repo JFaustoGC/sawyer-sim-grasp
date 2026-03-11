@@ -43,7 +43,7 @@ _SPEED_MAP = {
 }
 
 # Initial "ready" joint configuration (safe pose, avoids collisions at start)
-_READY_JOINTS = [0.0, -0.9, 0.0, 1.8, 0.0, 0.6, 1.5]
+_READY_JOINTS = [0.0, -0.9, 0.0, 1.8, 0.0, 0.6, 1.776047]
 
 # How high the robot base sits above the MuJoCo world floor
 _ROBOT_BASE_Z = 0.15
@@ -275,6 +275,66 @@ class SawyerSim:
         """Close the gripper fingers."""
         self._check_started()
         self._robot.close_gripper()
+
+    def get_joints(self) -> List[float]:
+        """
+        Return the current joint angles (7 values, radians).
+
+        Joint order: j0, j1, j2, j3, j4, j5, j6 (base to wrist).
+        The last joint (j6) controls the wrist rotation / gripper orientation.
+        """
+        self._check_started()
+        return list(self._robot.get_joints().values)
+
+    def set_joints(self, angles: List[float]) -> None:
+        """
+        Instantly teleport the robot to a joint configuration (no animation).
+
+        Args:
+            angles: 7 joint angles in radians [j0 … j6].
+                    Use ``get_joints()`` to read the current values first.
+
+        Example::
+
+            # Rotate the wrist to change gripper orientation
+            joints = sim.get_joints()
+            joints[6] += 0.5   # rotate wrist ~30°
+            sim.set_joints(joints)
+        """
+        self._check_started()
+        if len(angles) != 7:
+            raise ValueError(f"Expected 7 joint angles, got {len(angles)}")
+        self._robot.teleport_joints(list(angles))
+        self._robot.sleep(0.1)
+
+    def move_joints(self, angles: List[float], speed: str = "medium") -> bool:
+        """
+        Move to a joint configuration using a smooth planned trajectory.
+
+        Args:
+            angles: 7 target joint angles in radians [j0 … j6].
+            speed:  ``"slow"``, ``"medium"`` (default), or ``"fast"``.
+
+        Returns:
+            ``True`` on success, ``False`` if planning failed.
+
+        Example::
+
+            # Move to the ready pose
+            sim.move_joints([0.0, -0.9, 0.0, 1.8, 0.0, 0.6, 1.776047])
+        """
+        self._check_started()
+        if len(angles) != 7:
+            raise ValueError(f"Expected 7 joint angles, got {len(angles)}")
+        profile = _SPEED_MAP.get(speed, MotionProfile.MEDIUM)
+        traj = self._planner.plan_joint(
+            self._robot.get_joints(), list(angles), profile=profile
+        )
+        if traj is None:
+            print("[SawyerSim] Warning: joint planning failed.")
+            return False
+        self._robot.execute_trajectory(traj, rate_hz=100)
+        return True
 
     # ── Sensing ───────────────────────────────────────────────────────────────
 

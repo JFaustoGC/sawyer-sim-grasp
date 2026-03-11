@@ -94,6 +94,14 @@ x, y, z = sim.get_position()        # read gripper position
 sim.wait(1.0)                        # pause N seconds
 sim.reset()                          # return to ready pose
 sim.close()                          # shut down
+
+# Joint control
+joints = sim.get_joints()            # read 7 joint angles [j0…j6] in radians
+joints[6] += 0.5                     # rotate wrist ~30° (changes gripper orientation)
+sim.set_joints(joints)               # teleport instantly (no animation)
+sim.move_joints(joints)              # move smoothly with planned trajectory
+# Ready pose joint angles: [0.0, -0.9, 0.0, 1.8, 0.0, 0.6, 1.776047]
+# Last value (j6 = 1.776047) sets the gripper facing forward — change it to rotate.
 ```
 
 ### Cube size reference
